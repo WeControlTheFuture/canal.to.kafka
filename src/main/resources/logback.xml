@@ -1,0 +1,75 @@
+<configuration scan="true" scanPeriod=" 5 seconds">
+	<jmxConfigurator />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56} -
+				%msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="CANAL-KAFKA-ROOT" class="ch.qos.logback.classic.sift.SiftingAppender">
+	    <discriminator>
+			<Key>destination</Key>
+			<DefaultValue>canal</DefaultValue>
+		</discriminator>
+		<sift>
+			<appender name="FILE-${destination}"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<File>../logs/canal-kafka.log</File>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>../logs/canal-kafka-%d{yyyy-MM-dd}-%i.log.gz
+					</fileNamePattern>
+					<timeBasedFileNamingAndTriggeringPolicy
+						class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+						<!-- or whenever the file size reaches 100MB -->
+						<maxFileSize>512MB</maxFileSize>
+					</timeBasedFileNamingAndTriggeringPolicy>
+					<maxHistory>60</maxHistory>
+				</rollingPolicy>
+				<encoder>
+					<pattern>
+						%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}
+						-
+						%msg%n
+					</pattern>
+				</encoder>
+			</appender>
+		</sift>
+	</appender>
+
+	<logger name="com.alibaba.otter.canal.instance" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="CANAL-KAFKA-ROOT" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.alibaba.otter.canal.deployer" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="CANAL-KAFKA-ROOT" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.alibaba.otter.canal.meta.FileMixedMetaManager"
+		additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="CANAL-KAFKA-ROOT" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.alibaba.otter.canal.parse.driver.mysql"
+		additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.alibaba.otter.canal.instance.spring" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="STDOUT"/>
+	</logger>
+	<logger name="com.alibaba.otter.canal.to.kafka" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="STDOUT"/>
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CANAL-KAFKA-ROOT" />
+	</root>
+</configuration>

@@ -1,0 +1,113 @@
+不合并事务数据格式
+{"header":     /**协议头部信息**/
+	{
+		"logfileName":"",                            /**binlog/redolog 文件名**/
+		"logfileOffset":"",                          /**binlog/redolog 文件的偏移位置**/
+		"serverId":"",                               /**服务端serverId**/
+		"serverenCode":"",                           /**变更数据的编码**/
+		"executeTime":"",                            /**变更数据的执行时间 **/
+		"sourceType":"",                             /**变更数据的来源**/
+		"schemaName":"",                             /**变更数据的schemaname**/
+		"tableName":"",                              /**变更数据的tablename**/
+		"eventLength":"",                            /**每个event的长度**/
+		"eventType":""                               /**数据变更类型**/
+	},
+"entryType":"",          /**打散后的事件类型**/
+"TransactionBegin":
+	{
+		"threadId":""          /**执行的thread Id**/
+	},
+"TransactionEnd":
+	{
+		"transactionId":""     /**事务号**/
+	},
+"RowChange":{  /**message row 每行变更数据的数据结构**/
+		"tableId":"",                         /**tableId,由数据库产生**/
+		"eventType":"",                       /**数据变更类型**/
+		"isDdl":"",                           /** 标识是否是ddl语句  **/
+		"sql":"",                             /** ddl/query的sql语句  **/
+		"ddlSchemaName":"",                   /** ddl/query的schemaName，会存在跨库ddl，需要保留执行ddl的当前schemaName  **/
+		"RowData":
+			[
+				{
+					"beforeColumn":
+						{
+							"index":"",           /**字段下标**/
+							"sqlType":"",         /**字段java中类型**/
+							"name":"",            /**字段名称(忽略大小写)，在mysql中是没有的**/
+							"isKey":"",           /**是否是主键**/
+							"updated":"",         /**如果EventType=UPDATE,用于标识这个字段值是否有修改**/
+							"isNull":"",          /** 标识是否为空  **/
+							"value":"",           /** 字段值,timestamp,Datetime是一个时间格式的文本 **/
+							"length":"",          /** 对应数据对象原始长度 **/
+							"mysqlType":""        /**字段mysql类型**/
+						},
+					"afterColumn":
+						{
+							"index":"",           /**字段下标**/
+							"sqlType":"",         /**字段java中类型**/
+							"name":"",            /**字段名称(忽略大小写)，在mysql中是没有的**/
+							"isKey":"",           /**是否是主键**/
+							"updated":"",         /**如果EventType=UPDATE,用于标识这个字段值是否有修改**/
+							"isNull":"",          /** 标识是否为空  **/
+							"value":"",           /** 字段值,timestamp,Datetime是一个时间格式的文本 **/
+							"length":"",          /** 对应数据对象原始长度 **/
+							"mysqlType":""        /**字段mysql类型**/
+						}	
+				},
+				{}
+			]
+	}
+}
+
+并事务数据格式
+{"header":     /**协议头部信息**/
+	{
+		"logfileName":"",                            /**binlog/redolog 文件名**/
+		"logfileOffset":"",                          /**binlog/redolog 文件的偏移位置**/
+		"serverId":"",                               /**服务端serverId**/
+		"serverenCode":"",                           /**变更数据的编码**/
+		"executeTime":"",                            /**变更数据的执行时间 **/
+		"sourceType":"",                             /**变更数据的来源**/
+		"schemaName":"",                             /**变更数据的schemaname**/
+		"tableName":"",                              /**变更数据的tablename**/
+		"eventLength":"",                            /**每个event的长度**/
+		"eventType":""                               /**数据变更类型**/
+	},
+"RowChange":/**message row 每行变更数据的数据结构**/
+	[
+		{  
+			"tableId":"",                         /**tableId,由数据库产生**/
+			"eventType":"",                       /**数据变更类型**/
+			"isDdl":"",                           /** 标识是否是ddl语句  **/
+			"sql":"",                             /** ddl/query的sql语句  **/
+			"ddlSchemaName":"",                   /** ddl/query的schemaName，会存在跨库ddl，需要保留执行ddl的当前schemaName  **/
+			"RowData":
+				{
+					"beforeColumn":
+						[{
+							"index":"",           /**字段下标**/
+							"name":"",            /**字段名称(忽略大小写)，在mysql中是没有的**/
+							"isKey":"",           /**是否是主键**/
+							"updated":"",         /**如果EventType=UPDATE,用于标识这个字段值是否有修改**/
+							"isNull":"",          /** 标识是否为空  **/
+							"value":"",           /** 字段值,timestamp,Datetime是一个时间格式的文本 **/
+							"length":"",          /** 对应数据对象原始长度 **/
+							"mysqlType":""        /**字段mysql类型**/
+						}],
+					"afterColumn":
+						[{
+							"index":"",           /**字段下标**/
+							"name":"",            /**字段名称(忽略大小写)，在mysql中是没有的**/
+							"isKey":"",           /**是否是主键**/
+							"updated":"",         /**如果EventType=UPDATE,用于标识这个字段值是否有修改**/
+							"isNull":"",          /** 标识是否为空  **/
+							"value":"",           /** 字段值,timestamp,Datetime是一个时间格式的文本 **/
+							"length":"",          /** 对应数据对象原始长度 **/
+							"mysqlType":""        /**字段mysql类型**/
+						}]	
+				}
+		}
+		,{}
+	]
+}
